@@ -11,6 +11,29 @@ good
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+a <- 2
+3 -> b
+```
+
+```{r}
+30 + a
+```
+```{r}
+class (a)
+```
+
+```{r}
+a2 <- 5L
+```
+
+```{r}
+class
+```
+```{r}
+`107學年成績` <- 90
+```
+
 ## R Markdown
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
