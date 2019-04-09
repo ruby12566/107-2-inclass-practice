@@ -1,12 +1,21 @@
 ---
-title: '2019-04-03'
-author: "tingu"
+title: 'homework 1'
 date: "2019年4月6日"
 output: html_document
+params:
+  studentID:"410473044"
+  studentName: "陳亭妤"
+
+
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(lubridate); library(stringr)
 ```
 
 ## R Markdown
@@ -20,6 +29,9 @@ summary(cars)
 ```
 
 ## Including Plots
+```{r}
+
+```
 
 You can also embed plots, for example:
 
@@ -28,3 +40,246 @@ plot(pressure)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+x3 <- c("小明","小花")
+y3 <- c("小明","小華")
+```
+
+```{r}
+x3 == y3
+x3 != y3
+```
+
+! negation
+```{r}
+x3 == y3
+!(x3 == y3)
+```
+```{r}
+x4 <- c(1,5,8)
+y4 <- c(5,8)
+
+x4 %in% y4
+```
+
+```{r}
+x5 <- c("台北市","新北市","高雄市")
+y5 <- c("台北市","新北市")
+
+x5 %in% y5
+```
+```{r}
+x2 <- c(1,NA,10)
+y2 <- c(-1,NA,20)
+
+x3 <- c(NA,"小花")
+y3 <- c(NA,"小華")
+```
+
+```{r}
+is.na(x2)
+```
+
+```{r}
+0/0
+```
+
+```{r}
+head(currency) #head顯示物件前六個元素值
+```
+
+```{r}
+currency <- as.factor(currency)
+class(currency)
+```
+
+```{r}
+levels(currency)
+```
+
+```{r}
+length(levels(currency))
+```
+
+```{r}
+step1_extractLevelsVector <- levels(currency)
+step1_extractLevelsVector
+```
+
+```{r}
+step2_countVectorLength <-
+length(step1_extractLevelsVector)
+```
+
+```{r}
+step2_countVectorLength 
+```
+
+```{r}
+head(currency)
+levels(currency)
+```
+
+```{r}
+currency2 <- c("日元","美元","日元")
+currency2
+```
+```{r}
+sum(currency2 == "日元")
+```
+```{r}
+head(currency)
+sum(currency == "日圓JPY/USD")
+```
+#圈圈是圈出retional operation為真的元素位置
+```{r}
+x5 <- c("台北市","新北市","基隆市")
+greatTaipei <- c("台北市","新北市","基隆市")
+
+x5 %in% greatTaipei
+!(x5 %in% greatTaipei)
+```
+```{r}
+y5 <- c("女","男","女")
+
+y5=="男"
+!(y5=="男")
+```
+```{r}
+x5 %in% greatTaipei
+y5=="女"
+(x5 %in% greatTaipei) & (y5=="女") #(&)圈出同時是來自greattaipei的女性
+```
+```{r}
+which((x5 %in% greatTaipei) & (y5=="女")) #which代表位置
+```
+
+```{r}
+x5 %in% greatTaipei
+y5=="男"
+(x5 %in% greatTaipei) | (y5=="女")
+```
+```{r}
+which((x5 %in% greatTaipei) | (y5=="女"))
+```
+```{r}
+x5 %in% greatTaipei
+y5=="男"
+xor(x5 %in% greatTaipei, y5=="男")
+x5 %in% greatTaipei
+y5=="女"
+xor(x5 %in% greatTaipei, y5=="女")
+```
+```{r}
+which(xor(x5 %in% greatTaipei, y5=="女"))
+```
+
+#綜合練習
+```{r}
+library(readr)
+exData2 <- read_csv("https://raw.githubusercontent.com/tpemartin/github-data/master/exData2.csv")
+date <- as.character(exData2$ 期間)
+currency <- exData2$ 幣別
+exchangeRate <- exData2$ 匯率
+```
+```{r}
+class(date)
+```
+```{r}
+head(date)
+```
+```{r}
+library(lubridate)
+date <- ymd(date)
+```
+
+```{r}
+class(date)
+```
+
+Q:1980-08-01之後的資料有多少筆
+```{r}
+iSAfter19800801 <-
+  date >=ymd("1980-08-01")
+iSAfter19800801
+```
+```{r}
+head (as.integer(date))
+as.integer(ymd("1980-08-01"))
+head (date >= ymd("1980-08-01") )
+```
+```{r}
+class(iSAfter19800801)
+```
+
+```{r}
+sum (iSAfter19800801)
+```
+Q:幣別為“歐元USD/EUR”的資料有多少筆
+```{r}
+head(currency == "歐元USD/EUR")
+isEURO <- currency == "歐元USD/EUR"
+sum(isEURO)
+```
+Q:將currency轉成factor class
+```{r}
+currency <- as.factor(currency)
+isEURO <- currency =="歐元USD/EUR"
+sum(isEURO)
+```
+
+Q:exchangeRate有多少筆NA
+```{r}
+isExchangeRateNA <-
+  is.na(exchangeRate)
+sum(isExchangeRateNA)
+```
+Q:排除NA後，幣別為“歐元USD/EUR”的資料有多少筆
+```{r}
+isNotNA <- !is.na(exchangeRate)
+isEURO <- currency == "歐元USD/EUR"
+```
+
+```{r}
+satisfyBoth <-
+  !is.na(exchangeRate)& currency ==
+"歐元USD/EUR"
+sum(satisfyBoth)
+```
+
+```{r}
+library(readr)
+transcriptDataFinal <- read_csv("https://raw.githubusercontent.com/tpemartin/github-data/master/transcriptDataFinal.csv")
+courseType <- transcriptDataFinal$`必選修類別（必∕選∕通）`
+major <- transcriptDataFinal$學系
+studentID <- transcriptDataFinal$學號
+grade <- transcriptDataFinal$學期成績
+```
+
+有多少筆資料是來自經濟學系
+```{r}
+sum(major == "經濟學系")
+```
+
+請問學號“5bdS6977b”同學修了多少課
+```{r}
+sum(studentID == "5bdS6977b" )
+```
+請問學號“5bdS6977b”有多少科成績及格
+```{r}
+sum(grade >= 60 & studentID == "5bdS6977b")
+```
+有多少筆資料來自經濟學系學生且為選修課
+```{r}
+sum(courseType == "選" & major == "經濟學系")
+```
+在經濟學系學生且必修課程中，成經不及格佔多少比例
+```{r}
+sum(major == "經濟學系" & courseType == "必") -> 分母 
+分母
+sum(major == "經濟學系" & courseType == "必" & grade < 60) -> 分子
+分子
+分子/分母
+```
+
