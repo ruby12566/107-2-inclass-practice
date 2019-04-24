@@ -1,0 +1,102 @@
+---
+title: '2019-04-24'
+author: "???遠"
+date: "4/24/2019"
+output: html_document
+---
+
+```{r}
+a <- matrix(c(1:6), nrow=3, ncol=2) ##建立3x2的矩陣，分別填入1~6的值
+a
+```
+
+```{r}
+MAT2 <- matrix(c("a","b","c","d"),2,2)
+MAT2
+class(MAT2)
+typeof(MAT2)
+MAT2[[1]] 
+MAT2[c(T,F,F,T)]
+```
+
+```{r}
+StuList <- list(
+  學號=c(172,214,322,425,517),
+  姓名=c("小明","大雄","胖虎","小新","大白"),
+  成績=c(80,60,90,70,50)
+  )
+StuList
+```
+
+```{r}
+StuDF <- data.frame(
+  學號=c(172,214,322,425,517),
+  姓名=c("小明","大雄","胖虎","小新","大白"),
+  成績=c(80,60,90,70,50)
+  )
+StuDF 
+```
+
+```{r}
+class(StuDF)
+typeof(StuDF)
+```
+
+```{r}
+StuDF
+StuDF[["姓名"]][[3]]
+```
+```{r}
+class(StuDF$姓名)
+```
+
+```{r}
+StuDF2 <- data.frame(
+  學號=c(172,214,322,425,517),
+  姓名=c("小明","大雄","胖虎","小新","大白"),
+  成績=c(80,60,90,70,50),
+  stringsAsFactors = FALSE
+  )
+StuDF2 
+```
+```{r}
+LETTERS
+chosenLETTERS <- LETTERS[1:15]
+matObj1 <- matrix(chosenLETTERS,5,3)
+matObj1
+```
+```{r}
+matObj1[3,2] 
+matObj1[c(F,F,TRUE,F,F),c(F,TRUE,F)]
+```
+
+```{r}
+matObj1[4,2]
+matObj1[c(1,5),c(2,1)]
+matObj1[c(T,F,F,F,T),c(T,T,F)]
+```
+
+
+
+
+```{r}
+LETTERS
+chosenLETTERS <- LETTERS[1:8]
+m <- matrix(chosenLETTERS,2,4)
+m
+tolower(m) # 轉成小寫
+m
+toupper(m) # 轉成大寫
+m
+```
+
+```{r}
+library(readr)
+classSurvey <- read_csv("https://raw.githubusercontent.com/tpemartin/github-data/master/classSurvey.csv")
+```
+```{r}
+classSurvey[,4:5]
+classSurvey[,c(4,5)]
+classSurvey[,c(F,F,F,T,T,F)]
+```
+
