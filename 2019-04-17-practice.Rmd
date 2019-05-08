@@ -1,0 +1,177 @@
+---
+title: '2019-04-17'
+author: "tingu."
+date: "4/17/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(stringr)
+library(lubridate)
+```
+
+
+```{r}
+a<-c(1:3)
+typeof(a)
+a
+```
+
+```{r}
+aWithNames <- c(
+  a1=1,
+  a2=2,
+  a3=3
+)
+typeof(a)
+aWithNames
+```
+
+
+```{r}
+b1<-list("a","b",c(1:10))
+typeof(b1)
+```
+
+```{r}
+b2<-list(
+  第一個="a",
+  第二個="b",
+  第三個=c(1:10))
+```
+
+```{r}
+b1
+b2
+```
+
+```{r}
+studentRecord <-
+  list(
+    學號="410073058",
+    姓名="王小明",
+    性別="男",
+    學年平均成績=list(
+      一年級=88,
+      二年級=90.3,
+      三年級=92,
+      四年級=95
+    )
+  )
+
+studentRecord
+```
+
+```{r}
+plasticContainer <- list(
+  greenBox=c("paper","scissor"),     # location 1
+  redBox=c(1,3,2.5),               # location 2
+  blueBox=c(TRUE,FALSE,TRUE,TRUE)    # location 3
+)
+```
+```{r}
+plasticContainer[["greenBox"]] 
+plasticContainer[[1]]
+```
+```{r}
+x <- plasticContainer[["greenBox"]] 
+x[[1]]
+```
+```{r}
+plasticContainer[["greenBox"]][[1]]
+```
+```{r}
+plasticContainer[c("greenBox","redBox")] 
+plasticContainer[c(1,2)]
+```
+```{r}
+list(
+  greenBox=c("paper","scissor"),
+  redBox=c(1,3,2.5)
+)
+```
+
+```{r}
+extract1 <- plasticContainer[c("greenBox")]
+extract2 <- plasticContainer[[c("greenBox")]]
+```
+```{r}
+extract1 <- plasticContainer[c("greenBox")]
+extract1[[1]][[1]]
+
+extract2 <- plasticContainer[[c("greenBox")]]
+extract2[1]
+```
+
+
+
+
+```{r}
+成績單 <- c(
+  個經=90,
+  總經=77,
+  統計=88
+)
+```
+```{r}
+成績單
+length(成績單)
+成績單[c(FALSE,TRUE,FALSE)]
+成績單 [c(1)]
+```
+
+```{r}
+length(plasticContainer)
+plasticContainer[c(T,F,T)]
+```
+
+```{r}
+your_github_username <- "tpemartin"
+your_practice_reponame <- "107-2-inclass-practice"
+library(httr)
+library(stringr)
+str_replace_all(
+  "https://api.github.com/repos/:owner/:repo/commits",
+  c(
+    ":owner"=your_github_username,
+    ":repo"=your_practice_reponame
+    )
+  ) -> commitCheckStatement
+commitCheck <- content(GET(commitCheckStatement))
+```
+
+```{r}
+committwtime <- commitCheck[[4]][[3]][[2]][[3]]
+class(commitCheck[[4]][[3]][[2]][[3]])
+committwtime <- ymd_hms(committwtime)
+class(committwtime)
+Sys.timezone()
+twTime <- with_tz(committwtime,tzone="Asia/Taipei")
+twTime
+```
+
+```{r}
+library(readr)
+filmVotingData <- read_csv("https://raw.githubusercontent.com/tpemartin/github-data/master/podcastcompetition3.csv")
+str_replace(filmVotingData$請選擇你最喜歡的影片二部,", by"," by") -> favoriteTwo
+birthday <- filmVotingData$`出生西元年月日（驗證本人用）`
+timeStamp <- filmVotingData$Timestamp
+```
+```{r}
+library(stringr)
+str_split(favoriteTwo,", ") -> favoriteTwoList # 將選擇的兩片split成兩個元素
+unlist(favoriteTwoList) -> allVotes # 將list堆疊成atomic vector
+table(allVotes) # 計算每個類別的次數
+```
+```{r}
+str_length(birthday)
+logiCorrect <- str_length(birthday) == 8
+logiCorrect
+logiCorrect[logiCorrect]
+```
+
