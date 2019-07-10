@@ -1,0 +1,288 @@
+---
+title: "Untitled"
+author: "tingu"
+date: "2019年7月10日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+library(lubridate); library(stringr); library(purrr); library(readr);
+load(url("https://www.dropbox.com/s/8fcueq17vsy25cc/finalExam107-2.Rda?raw=1"))
+```
+###作答需知
+每一題會有設好的ans chunk，它會有ansxx標籤（如下的ans99），請將你的程式寫在裡面。每一題都需要你把答案存在指定的物件，並在「最後一行」打物件名稱。以下例，若答案是2+3並要你存在答案物件test裡，那你的程式如下：
+
+#1 字串數字比較
+寫一個函數str_smallClosest，使用方法為str_smallClosest(chrNumber,criticalNumber)，其中：
+
+chrNumber: 為character class的數字文字向量，如c(“10”,“25”,“11”)
+
+criticalNumber: 為數字。
+
+str_smallClosest(chrNumber,criticalNumber)會找出chrNumber字串數字中「小於等於」criticalNumber中的「最大值」且回傳值依然是character，例如：str_smallClosest(c("10","25","11"),12)會回傳字串“11”。本題答案物件是str_smallClosest。(hint: max()會找出數字向量中的最大值)
+
+答案物件：str_smallClosest函數；output class要求：character
+```{r}
+str_smallClosest <- function(chrNumber,criticalNumber){
+  num <- as.numeric(chrNumber)
+  logical<- ( num <= criticalNumber)
+  x<-max(num[logical])
+  output<-as.character(x)
+  return(output)
+}
+str_smallClosest(c("10","25","14"),12)
+#str_smallClosest
+```
+```{r}
+str_smallClosest <- function(chrNumber,criticalNumber){
+  as.numeric(chrNumber) -> numNumber
+  logiTrue <- numNumber <= criticalNumber
+  max(numNumber[(numNumber <= criticalNumber)]) -> maxNum
+  return(as.character(maxNum))
+}
+str_smallClosest(c("10","25","14"),12)
+#str_smallClosest
+```
+
+#2 選課準則清單
+以下是經濟學系不同入學年學生所適用的選課準則文件網址：
+
+104學年：http://www.econ.ntpu.edu.tw/econ/files/Way/2016072195041.doc
+
+105學年：http://www.econ.ntpu.edu.tw/econ/files/Way/20170516144353.doc
+
+107學年：http://www.econ.ntpu.edu.tw/econ/files/Way/20180518121643.pdf
+
+請建立一個list class的答案物件EconCourseSelectionInfo，其中EconCourseSelectionInfo[[“104”]]$url會得到“http://www.econ.ntpu.edu.tw/econ/files/Way/2016072195041.doc”; 而“104”若換成其他三個學年任一個，所得到的url訊息也會對應改變。本題答案物件是EconCourseSelectionInfo。
+
+答案物件：EconCourseSelectionInfo；class要求：list
+
+
+```{r}
+EconCourseSelectionInfo <- list(
+  "104"=list(url="http://www.econ.ntpu.edu.tw/econ/files/Way/2016072195041.doc"),
+  "105"=list(url="http://www.econ.ntpu.edu.tw/econ/files/Way/20170516144353.doc"),
+  "107"=list(url="http://www.econ.ntpu.edu.tw/econ/files/Way/20180518121643.pdf")
+)
+EconCourseSelectionInfo
+#EconCourseSelectionIfo 
+```
+#3 雙時區轉換
+執行以下程式取得question1DF物件，其元素值為隨機產生。
+```{r}
+question1Data() -> question1DF
+question1DF
+```
+question1DF有兩個欄位，一個是character class的日期時間輸入（date_time），另一個是date_time來自的時區。請將date_time全換成以“Europe/Lisbon”呈現的character class日期時間答案物件dateTimeLisbon。(hint: dateTimeLisbon先用vector()函數創好，以用來存你的答案。)
+答案物件：dateTimeLisbon; class要求：character
+```{r}
+logiTP <- question1DF$time_zone=="Asia/Taipei"
+logiNY <- question1DF$time_zone=="America/New_York"
+dateTimeLisbon <- vector("character",length(question1DF$date_time))
+dateTimeLisbon[logiTP] <-
+  as.character(
+    with_tz(
+      ymd_hms(question1DF$date_time[logiTP],tz="Asia/Taipei"),
+      tzone="Europe/Lisbon"
+    )
+  )
+dateTimeLisbon[logiNY] <-
+  as.character(
+    with_tz(
+      ymd_hms(question1DF$date_time[logiNY],tz="America/New_York"),
+      tzone="Europe/Lisbon"
+    )
+  )
+dateTimeLisbon
+#dateTimeLisbon
+```
+#4 多時區轉換
+執行以下程式取得question2DF物件，其元素值為隨機產生。
+
+```{r}
+question2DF <- question2Data()
+```
+question2DF有兩個欄位，一個是character class的日期時間輸入（date_time），另一個是date_time來自的時區。請將date_time全換成以“Europe/Lisbon”呈現的character class日期時間。與前一題不同的是，question2DF資料來自時區眾多，無法如前題一個個分開處理，需使用到迴圈。
+
+
+#4.1 時區轉換函數
+寫一個函數tzChange，函數使用為tzChange(chrDateTimeInput,fromTz,toTz)，其中：
+
+chrDateTimeInput: character class的字串日期向量，日期格式為ymd_hms
+
+fromTz: chrDateTimeInput來自時區
+
+toTz: 要將chrDateTimeInput轉成的時區
+
+函數output為
+
+character class, chrDateTimeInput轉成toTz時區的ymd_hms字串表示。
+答案物件：tzChange函數; output class要求: character
+```{r}
+tzChange <- function(chrDateTimeInput,fromTz,toTz){
+   return(
+    as.character(
+      with_tz(
+        ymd_hms(chrDateTimeInput,tz=fromTz),
+        tzone=toTz
+      )
+    )
+  )
+}
+tzChange
+#tzChange
+```
+#4.2 迴圈與多時區轉換
+使用迴圈將question2DF$date_time由question2DF$time_zone均轉成以“Europe/Lisbon”時區顯示的時間，並存在答案物件dateTimeLisbon2裡。
+
+答案物件：dateTimeLisbon2；class要求：character
+```{r}
+levels(as.factor(question2DF$time_zone))-> allTzones
+dateTimeLisbon2 <- vector("character",length(question2DF$date_time))
+for(i in seq_along(allTzones)){
+  #i<-1
+  question2DF$time_zone==allTzones[[i]] -> logiTZ_i
+  tzChange(question2DF$date_time[logiTZ_i],
+           allTzones[[i]],
+           "Europe/Lisbon") -> dateTimeLisbon2[logiTZ_i]
+}
+dateTimeLisbon2
+#dateTimeLisbon2
+```
+#5 Google Analytics
+Google Analytics（簡稱GA）是Google公司提供的網頁及APP使用狀況追踪統計工具，執行以下程序取得本課程使用GA追踪的三個資料數據：
+
+```{r}
+load(url("https://www.dropbox.com/s/t148l8bflvubyhm/GA.Rda?raw=1"))
+```
+
+#5.1 學習歷程
+user_report_exportStudent記錄的是一位學生在某台機器瀏覽自己學習歷程網頁的統計資訊，其中：
+
+user_report_exportStudent[["dates"]][["date"]]: 有瀏覽學習歷程網頁的日期。
+
+user_report_exportStudent[["dates"]][["sessions"]]: 每個瀏覽日期的資料GA稱之為sessions，此為學生有9個瀏覽日期，故在此元素下還有9個元素，若要取得第4個瀏覽日期的資料可使用user_report_exportStudent[["dates"]][["sessions"]][[4]]，其為data frame class，且row的個數表示在當天點了學習歷程網頁幾次。
+
+寫一個程序去計算這位學生點擊了自己學習歷程網頁多少次。 (請勿用手指數，改題程式會使用另一位學生的user_report_exportStudent物件資料)
+
+答案物件：totalClicks；class要求：integer
+```{r}
+clickCount <- vector("integer",length(user_report_exportStudent[["dates"]][["sessions"]]))
+for(i in seq_along(user_report_exportStudent[["dates"]][["sessions"]])){
+  nrow(user_report_exportStudent[["dates"]][["sessions"]][[i]]) -> clickCount[[i]]
+} 
+totalClicks <- sum(clickCount)
+
+totalClicks
+```
+#5.2 來自老師的點擊
+除了學生自己以外，老師也有可能拜訪學生的學習歷程網頁。user_report_exportDesktop與user_report_exportMobile分別是老師使用自己電腦和手機點閱本課程相關網頁的統計資訊，除了不同學生的學習歷程外，還可能包含了課程電子書的點擊。這兩個物件的資訊記錄結構和user_report_exportStudent相同，以下進一步說明session元素底下的資訊：
+
+user_report_exportDesktop[["dates"]][["sessions"]][[9]]$activities: 記錄了第9個瀏覽日期老師的網頁拜訪資訊，它底下的元素個數代表了當天拜訪了多少網頁；其中，
+
+user_report_exportDesktop[["dates"]][["sessions"]][[9]]$activities[[1]]$details: 記錄了當天的「第一個」時段拜訪網頁的資訊細節（即.[[1]]$details的粹取意思）。
+
+從user_report_exportDesktop[["dates"]][["sessions"]][[1]]$activities[[1]]$details底下的元素資訊，找出它底下「第一個」拜訪網頁的網址（在底下找一個名為Page URL元素，其值為我們要的答案。這裡.$details可能有好幾個元素都有Page URL, 考試只找「第一個」元素的Page URL就好，讓題目簡化），並存在character class的答案物件session6_act1_url。
+
+答案物件：session6_act1_url；class要求：character
+```{r}
+user_report_exportDesktop[["dates"]][["sessions"]][[1]]$activities[[1]]$details -> details1
+
+details1[[1]]$`Page URL`[[1]] -> session6_act1_url
+
+session6_act1_url
+```
+#5.3 單一日期拜訪網頁網址
+設計一個函數activityURL_find，使用方法為activityURL_find(activity)，其中：
+
+activity: 為單一session的activities元素，比如user_report_exportDesktop[["dates"]][["sessions"]][[6]]$activities是第6個session的activity, 它可以用來當做input; 把6換成其他session數字也可以成為另一個input值。
+這個函數會輸出一個character class向量，每個元素是activities底下每個元素下的details元素裡我們只取它的「第一個」點擊瀏覽過的Page URL（這裡只找「第一個」是為了讓題目簡化）。
+
+答案物件：activityURL_find函數；output class要求：character
+```{r}
+#activity <- user_report_exportDesktop[["dates"]][["sessions"]][[6]]$activities
+
+activityURL_find <- function(activity){
+  activityURLs <- vector("character",length(activity))
+  for(i in seq_along(activity)){
+    #i<-2
+    activity[[i]]$details[[1]]$`Page URL`[[1]] ->
+      activityURLs[[i]]
+  }
+  return(activityURLs)  
+}
+  
+activityURL_find
+```
+#5.4 所有日期拜訪網頁網址
+將所有sessions拜訪網頁網址收集成為一個character class的答案物件allURLs_chr。（hint: list and unlist()）
+
+activities底下每個元素下的details元素裡我們只取它的「第一個」點擊瀏覽過的Page URL（這裡只找「第一個」是為了讓題目簡化）
+
+答案物件：allURLs_chr；class要求：character
+```{r}
+allURLs <- vector("list",length(user_report_exportDesktop[["dates"]][["sessions"]]))
+for(i in seq_along(user_report_exportDesktop[["dates"]][["sessions"]])){
+  user_report_exportDesktop[["dates"]][["sessions"]][[i]]$activities -> activity_i
+  activityURL_find(activity_i) -> allURLs[[i]]
+} 
+
+unlist(allURLs) -> allURLs_chr
+
+allURLs_chr
+```
+#5.5 老師點擊統計
+製作一個data frame名稱為df_teacherVisits, 它由allURLs_chr 產生，它包含兩個欄位：
+
+sha: character class, 為allURLs_chr的所有可能網址的sha代碼，它是URLs中“/course-107-2-learning-progress/”之後，“.html”之前的那串文字亂碼，如：
+
+原URL: “/course-107-2-learning-progress/a0d179872f05.html”； 它的
+
+sha: “a0d179872f05”
+
+visit_count: integer class, sha所指網頁在allURLs_chr出現的次數，即老師拜訪次數。
+
+df_teacherVisits請不要有重覆出現的資料，即任何一個row的資料值不會出現在另一個row。(hint: table(), as.integer(), str_replace() or  str_replace_all())
+
+答案物件：df_teacherVisits；class要求：data frame，其中sha欄位是character, visit_count欄位是integer
+```{r}
+table(allURLs_chr) -> tb_allURLs
+names(tb_allURLs) -> urlNames
+str_replace_all(urlNames, 
+                c("/course-107-2-learning-progress/"="",
+                  ".html"="")) -> shaValues
+df_teacherVisits <- data.frame(
+  sha=shaValues,
+  visit_count=as.integer(tb_allURLs),
+  stringsAsFactors = F
+)
+
+df_teacherVisits
+```
+存檔及上傳提醒
+答完後上傳前，請確認每個code chunk的最後一行皆為該題的答案物件（除非題目有另外規定），且frontmatter的資料皆有填寫。
+
+注意： 沒有存檔成utf-8格式或frontmatter資訊沒填寫會扣1分。
+
