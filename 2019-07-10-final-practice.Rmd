@@ -196,6 +196,7 @@ for(i in seq_along(user_report_exportStudent[["dates"]][["sessions"]])){
 totalClicks <- sum(clickCount)
 
 totalClicks
+#totalClicks
 ```
 #5.2 來自老師的點擊
 除了學生自己以外，老師也有可能拜訪學生的學習歷程網頁。user_report_exportDesktop與user_report_exportMobile分別是老師使用自己電腦和手機點閱本課程相關網頁的統計資訊，除了不同學生的學習歷程外，還可能包含了課程電子書的點擊。這兩個物件的資訊記錄結構和user_report_exportStudent相同，以下進一步說明session元素底下的資訊：
@@ -212,7 +213,8 @@ user_report_exportDesktop[["dates"]][["sessions"]][[1]]$activities[[1]]$details 
 
 details1[[1]]$`Page URL`[[1]] -> session6_act1_url
 
-session6_act1_url
+session6_act1_ur
+#session6_act1_ur
 ```
 #5.3 單一日期拜訪網頁網址
 設計一個函數activityURL_find，使用方法為activityURL_find(activity)，其中：
@@ -235,6 +237,7 @@ activityURL_find <- function(activity){
 }
   
 activityURL_find
+#activityURL_find
 ```
 #5.4 所有日期拜訪網頁網址
 將所有sessions拜訪網頁網址收集成為一個character class的答案物件allURLs_chr。（hint: list and unlist()）
@@ -248,10 +251,9 @@ for(i in seq_along(user_report_exportDesktop[["dates"]][["sessions"]])){
   user_report_exportDesktop[["dates"]][["sessions"]][[i]]$activities -> activity_i
   activityURL_find(activity_i) -> allURLs[[i]]
 } 
-
 unlist(allURLs) -> allURLs_chr
-
 allURLs_chr
+#allURLS_chr
 ```
 #5.5 老師點擊統計
 製作一個data frame名稱為df_teacherVisits, 它由allURLs_chr 產生，它包含兩個欄位：
@@ -278,8 +280,8 @@ df_teacherVisits <- data.frame(
   visit_count=as.integer(tb_allURLs),
   stringsAsFactors = F
 )
-
 df_teacherVisits
+#df_teacherVisits
 ```
 存檔及上傳提醒
 答完後上傳前，請確認每個code chunk的最後一行皆為該題的答案物件（除非題目有另外規定），且frontmatter的資料皆有填寫。
